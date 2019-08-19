@@ -16,7 +16,7 @@
 
 namespace ppconsul { namespace s11n {
 
-    using json11::Json;
+    using Json = json11::Json;
 
     namespace detail {
         inline Json parse_json(const std::string &s)

@@ -10,8 +10,7 @@ macro(link_test_libs project_name)
         ${CMAKE_SOURCE_DIR}/ext
         ${CMAKE_SOURCE_DIR}/tests
     )
-
-    target_link_libraries(${project_name} ppconsul)
+    target_link_libraries(${project_name} ppconsul Catch2::Catch2)
 endmacro()
 
 macro(add_catch_test name)

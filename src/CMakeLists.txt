@@ -4,7 +4,7 @@
 #  Boost Software License, Version 1.0. (See accompanying file
 #  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-project(ppconsul)
+project(ppconsul LANGUAGES CXX)
 
 set(HEADERS
     agent.h
@@ -37,29 +37,26 @@ set(SOURCES
     kv.cpp
     sessions.cpp
     status.cpp
+    curl/http_client.h
+    curl/http_client.cpp
 )
-
-if (${USE_CPPNETLIB})
-    list(APPEND SOURCES "netlib/http_client.h")
-    list(APPEND SOURCES "netlib/http_client.cpp")
-else ()
-    list(APPEND SOURCES "curl/http_client.h")
-    list(APPEND SOURCES "curl/http_client.cpp")
-endif ()
 
 foreach(SRC ${HEADERS})
     list(APPEND SOURCES "${HEADERS_DIR}/${SRC}")
 endforeach()
 
-if (BUILD_STATIC_LIB)
+# To build shared libraries in Windows, we set CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS to TRUE.
+# See https://cmake.org/cmake/help/v3.4/variable/CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS.html
+# See https://blog.kitware.com/create-dlls-on-windows-without-declspec-using-new-cmake-export-all-feature/
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+
+if (NOT BUILD_SHARED_LIBS)
     add_library(${PROJECT_NAME} STATIC
         ${SOURCES}
-        ${LIBB64_SOURCES}
     )
 else()
     add_library(${PROJECT_NAME} SHARED
         ${SOURCES}
-        ${LIBB64_SOURCES}
     )
 endif()
 
@@ -73,6 +70,7 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${Boost_INCLUDE_DIRS}
+        ${CURL_INCLUDE_DIR}
         ${CMAKE_SOURCE_DIR}/ext
 )
 
@@ -80,18 +78,10 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         json11
         ${Boost_LIBRARIES}
+        ${CURL_LIBRARIES}
 )
 
-if (${USE_CPPNETLIB})
-    target_include_directories(${PROJECT_NAME} PRIVATE ${CPPNETLIB_INCLUDE_DIRS})
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${CPPNETLIB_LIBRARIES})
-else ()
-    target_include_directories(${PROJECT_NAME} PRIVATE ${CURL_INCLUDE_DIR})
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${CURL_LIBRARIES})
-endif ()
-
 source_group(${PROJECT_NAME} FILES ${SOURCES})
-source_group(libb64 FILES ${LIBB64_SOURCES})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     VERSION ${Ppconsul_VERSION}

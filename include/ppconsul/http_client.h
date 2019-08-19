@@ -19,9 +19,9 @@ namespace ppconsul { namespace http { namespace impl {
         TlsConfig() = default;
 
         std::string cert;
-	std::string certType;
+	    std::string certType;
         std::string key;
-	std::string keyType;
+	    std::string keyType;
         std::string caPath;
         std::string caInfo;
         bool verifyPeer = true;

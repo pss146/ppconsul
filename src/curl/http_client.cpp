@@ -5,7 +5,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "http_client.h"
-#include "../http_helpers.h"
+#include "http_helpers.h"
 #include <ppconsul/helpers.h>
 #include <algorithm>
 #include <tuple>
@@ -13,11 +13,7 @@
 #include <cstdlib>
 #include <stdexcept>
 
-#if !defined PPCONSUL_USE_BOOST_REGEX
 #include <regex>
-#else
-#include <boost/regex.hpp>
-#endif
 
 #if (LIBCURL_VERSION_MAJOR < 7)
 #error "Where did you get such an ancient libcurl?"
@@ -56,15 +52,9 @@ namespace ppconsul { namespace curl {
             bool m_initialized;
         };
 
-#if !defined PPCONSUL_USE_BOOST_REGEX
         using std::regex;
         using std::regex_match;
         using std::cmatch;
-#else
-        using boost::regex;
-        using boost::regex_match;
-        using boost::cmatch;
-#endif
 
         const regex g_statusLineRegex(R"***(HTTP\/1\.1 +(\d\d\d) +(.*)\r\n)***");
         const regex g_consulHeaderLineRegex(R"***(([^:]+): +(.+)\r\n)***");

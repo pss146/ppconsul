@@ -1,3 +1,6 @@
+## Package Status
+[![Build Status](https://dev.azure.com/sperepelitsyn/conan-folly/_apis/build/status/pss146.ppconsul?branchName=master)](https://dev.azure.com/sperepelitsyn/conan-folly/_build/latest?definitionId=2&branchName=master)
+
 # Ppconsul
 
 *Version 0.1*
@@ -16,20 +19,15 @@ Library tests are currently running against **Consul v1.4.2**. Library is known 
 
 The library is written in C++11 and requires a quite modern compiler. Currently it's compiled with:
 * macOS: Clang 9 (Xcode 9.2)
-* Ubuntu Linux: GCC 5.3, GCC 4.9, GCC 4.8.2 all with stdlibc++
-* Windows: Visual Studio 2013 Update 3
-
-Newer versions of specified compilers should work fine.
-Older versions of Clang should work fine (at least Clang 5 and newer).
-Versions of GCC prior to 4.8 and Visual Studio prior to 2013 are known to fail.
+* Ubuntu Linux: GCC 5
+* Windows: Visual Studio 2015
 
 The library depends on:
-* [Boost](http://www.boost.org/) 1.55 or later. Ppconsul needs only headers with one exception: using of GCC 4.8 requires Boost.Regex library because [regular expressions are broken in GCC 4.8](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53631).
-* [libCURL](http://curl.haxx.se/libcurl/) ~~or [C++ Network Library](http://cpp-netlib.org/) (aka cpp-netlib)~~ to do HTTP/HTTPS. **Note that C++ Network Library support is removed. If you care, please share your thoughts in [Keep support for C++ Network Library](https://github.com/oliora/ppconsul/issues/11).**
+* [Boost](http://www.boost.org/) 1.66 or later.
+* [libCURL](http://curl.haxx.se/libcurl/) to do HTTP/HTTPS.
 
 The library includes code of the following 3rd party libraries (check `ext` directory):
 * [json11](https://github.com/dropbox/json11) library to deal with JSON.
-* [libb64](http://libb64.sourceforge.net/) library for base64 decoding.
 
 For unit tests, the library uses [Catch2](https://github.com/catchorg/Catch2) framework. Many thanks to Phil Nash for this great product.
 
@@ -179,7 +177,7 @@ TBD
 ### Get Dependencies
 * Get C++11 compatible compiler. See above for the list of supported compilers.
 * Install [CMake](http://www.cmake.org/) 3.1 or above.
-* Install [Boost](http://www.boost.org/) 1.55 or later. You need compiled Boost libraries if you going to use cpp-netlib or GCC 4.8, otherwise you need Boost headers only.
+* Install [Boost](http://www.boost.org/) 1.66 or later. You need compiled Boost libraries if you going to use cpp-netlib or GCC 4.8, otherwise you need Boost headers only.
 * Install [libCURL](http://curl.haxx.se/libcurl/) (any version should be fine).
 * If you want to run Ppconsul tests then install [Consul](http://consul.io) 0.4 or newer. *I recommend 0.7 or newer since it's easier to run them in development mode.*
 
