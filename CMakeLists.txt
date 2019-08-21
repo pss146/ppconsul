@@ -14,6 +14,9 @@ SET(BOOST_ROOT "${CONAN_BOOST_ROOT}")
 SET(CURL_ROOT "${CONAN_CURL_ROOT}")
 SET(CATCH2_ROOT "${CONAN_CATCH2_ROOT}")
 
+# ensure c++11 on all compilers
+set (CMAKE_CXX_STANDARD 11)
+
 option(BUILD_SHARED_LIBS "Build Ppconsul as shared library" OFF)
 option(BUILD_TESTS "Build Ppconsul tests" ON)
 

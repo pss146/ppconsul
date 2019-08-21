@@ -40,34 +40,35 @@ jobs:
         CONAN_CLANG_VERSIONS: 7.0
         CONAN_DOCKER_IMAGE: conanio/clang7
 
-# - job: macOS
-#   pool:
-#     vmImage: 'macOS-10.13'
-#   timeoutInMinutes: 120
-#   steps:
-#   - script: |
-#       /bin/bash -c "sudo xcode-select -s /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer"
-#       pip install --upgrade pip
-#       chmod +x .ci/install.sh
-#       ./.ci/install.sh
-#       chmod +x .ci/run.sh
-#       ./.ci/run.sh
-#     env:
-#       CONAN_LOGIN_USERNAME: $(CONAN_LOGIN_USERNAME)
-#       CONAN_PASSWORD: $(CONAN_PASSWORD)
-#       CONAN_REMOTES: https://api.bintray.com/conan/pss146/public-conan
-#       CONAN_UPLOAD: https://api.bintray.com/conan/pss146/public-conan
-#       CONAN_USERNAME: pss146
-#       CONAN_BUILD_POLICY: missing
-#       CONAN_CHANNEL: stable
-#   strategy:
-#     matrix:
-#       CLANG9.1:
-#         CONAN_APPLE_CLANG_VERSIONS: 9.1
-#         XCODE_VERSION: 9.4.1
-#       CLANG10.0:
-#         CONAN_APPLE_CLANG_VERSIONS: 10.0
-#         XCODE_VERSION: 10
+- job: macOS
+  pool:
+    vmImage: 'macOS-10.13'
+  timeoutInMinutes: 120
+  steps:
+  - script: |
+      /bin/bash -c "sudo xcode-select -s /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer"
+      pip install --upgrade pip
+      chmod +x .ci/install.sh
+      ./.ci/install.sh
+      chmod +x .ci/run.sh
+      ./.ci/run.sh
+    env:
+      CONAN_LOGIN_USERNAME: $(CONAN_LOGIN_USERNAME)
+      CONAN_PASSWORD: $(CONAN_PASSWORD)
+      CONAN_REMOTES: https://api.bintray.com/conan/pss146/public-conan
+      CONAN_UPLOAD: https://api.bintray.com/conan/pss146/public-conan
+      CONAN_USERNAME: pss146
+      CONAN_BUILD_POLICY: missing
+      CONAN_ARCHS: x86_64
+      CONAN_CHANNEL: stable
+  strategy:
+    matrix:
+      CLANG9.1:
+        CONAN_APPLE_CLANG_VERSIONS: 9.1
+        XCODE_VERSION: 9.4.1
+      CLANG10.0:
+        CONAN_APPLE_CLANG_VERSIONS: 10.0
+        XCODE_VERSION: 10
 
 - job: Windows
   timeoutInMinutes: 120  
@@ -96,15 +97,14 @@ jobs:
       CONAN_UPLOAD: https://api.bintray.com/conan/pss146/public-conan
       CONAN_USERNAME: pss146
       CONAN_BUILD_POLICY: missing
-      CONAN_CHANNEL: stable
+      CONAN_ARCHS: x86_64
+      CONAN_CHANNEL: stable      
   
   strategy:
     matrix:
       VS2019:
         imageName: 'windows-latest'
         CONAN_VISUAL_VERSIONS: 16
-        CONAN_ARCHS: x86_64
       VS2017:
         imageName: 'vs2017-win2016'
         CONAN_VISUAL_VERSIONS: 15
-        CONAN_ARCHS: x86_64
