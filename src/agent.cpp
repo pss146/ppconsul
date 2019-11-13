@@ -71,18 +71,21 @@ namespace impl {
             void operator() (const TtlCheck& c) const
             {
                 dst()["ttl"] = to_json(c.ttl);
+                dst()["DeregisterCriticalServiceAfter"] = c.deregisterCriticalServiceAfter;
             }
 
             void operator() (const ScriptCheck& c) const
             {
                 dst()["script"] = c.script;
                 dst()["interval"] = to_json(c.interval);
+                dst()["DeregisterCriticalServiceAfter"] = c.deregisterCriticalServiceAfter;
             }
 
             void operator() (const CommandCheck& c) const
             {
                 dst()["args"] = to_json(c.args);
                 dst()["interval"] = to_json(c.interval);
+                dst()["DeregisterCriticalServiceAfter"] = c.deregisterCriticalServiceAfter;
             }
 
             void operator() (const HttpCheck& c) const
@@ -91,6 +94,7 @@ namespace impl {
                 dst()["interval"] = to_json(c.interval);
                 if (c.timeout != decltype(c.timeout)::zero())
                     dst()["timeout"] = to_json(c.timeout);
+                dst()["DeregisterCriticalServiceAfter"] = c.deregisterCriticalServiceAfter;
             }
 
             void operator() (const TcpCheck& c) const
@@ -99,6 +103,7 @@ namespace impl {
                 dst()["interval"] = to_json(c.interval);
                 if (c.timeout != decltype(c.timeout)::zero())
                     dst()["timeout"] = to_json(c.timeout);
+                dst()["DeregisterCriticalServiceAfter"] = c.deregisterCriticalServiceAfter;
             }
 
             void operator() (const DockerScriptCheck& c) const
@@ -107,6 +112,7 @@ namespace impl {
                 dst()["shell"] = c.shell;
                 dst()["script"] = c.script;
                 dst()["interval"] = to_json(c.interval);
+                dst()["DeregisterCriticalServiceAfter"] = c.deregisterCriticalServiceAfter;
             }
 
             void operator() (const DockerCommandCheck& c) const
@@ -115,6 +121,7 @@ namespace impl {
                 dst()["shell"] = c.shell;
                 dst()["args"] = to_json(c.args);
                 dst()["interval"] = to_json(c.interval);
+                dst()["DeregisterCriticalServiceAfter"] = c.deregisterCriticalServiceAfter;
             }
 
             s11n::Json::object& dst() const { return *dst_; }

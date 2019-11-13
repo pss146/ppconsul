@@ -40,10 +40,11 @@ namespace ppconsul { namespace agent {
     {
         TtlCheck() = default;
 
-        explicit TtlCheck(const duration& ttl)
-        : ttl(ttl) {}
+        explicit TtlCheck(const duration& ttl, std::string deregisterCriticalServiceAfter = "")
+        : ttl(ttl), deregisterCriticalServiceAfter(std::move(deregisterCriticalServiceAfter)) {}
 
         duration ttl;
+        std::string deregisterCriticalServiceAfter;
     };
 
     // This check type is deprecated in Consul 1.0 and removed somewhen later.
@@ -53,12 +54,13 @@ namespace ppconsul { namespace agent {
     {
         ScriptCheck() = default;
 
-        ScriptCheck(std::string script, const duration& interval)
-        : script(std::move(script)), interval(interval) {}
+        ScriptCheck(std::string script, const duration& interval, std::string deregisterCriticalServiceAfter = "")
+        : script(std::move(script)), interval(interval), deregisterCriticalServiceAfter(std::move(deregisterCriticalServiceAfter)) {}
 
         std::string script;
         duration interval;
         duration timeout;
+        std::string deregisterCriticalServiceAfter;
     };
 
     // Not supported before Consul 1.0
@@ -66,23 +68,25 @@ namespace ppconsul { namespace agent {
     {
         CommandCheck() = default;
 
-        CommandCheck(StringList args, duration interval)
-        : args(std::move(args)), interval(interval) {}
+        CommandCheck(StringList args, duration interval, std::string deregisterCriticalServiceAfter = "")
+        : args(std::move(args)), interval(interval), deregisterCriticalServiceAfter(std::move(deregisterCriticalServiceAfter)) {}
 
         StringList args;
         duration interval;
+        std::string deregisterCriticalServiceAfter;
     };
 
     struct HttpCheck
     {
         HttpCheck() = default;
 
-        HttpCheck(std::string url, const duration& interval, const duration& timeout = duration::zero())
-        : url(std::move(url)), interval(interval), timeout(timeout) {}
+        HttpCheck(std::string url, const duration& interval, const duration& timeout = duration::zero(), std::string deregisterCriticalServiceAfter = "")
+        : url(std::move(url)), interval(interval), timeout(timeout), deregisterCriticalServiceAfter(std::move(deregisterCriticalServiceAfter)) {}
 
         std::string url;
         duration interval;
         duration timeout;
+        std::string deregisterCriticalServiceAfter;
     };
 
     namespace impl {
@@ -96,15 +100,16 @@ namespace ppconsul { namespace agent {
     {
         TcpCheck() = default;
 
-        TcpCheck(std::string address, const duration& interval, const duration& timeout = duration::zero())
-        : address(std::move(address)), interval(interval), timeout(timeout) {}
+        TcpCheck(std::string address, const duration& interval, const duration& timeout = duration::zero(), std::string deregisterCriticalServiceAfter = "")
+        : address(std::move(address)), interval(interval), timeout(timeout), deregisterCriticalServiceAfter(std::move(deregisterCriticalServiceAfter)) {}
 
-        TcpCheck(const std::string& host, uint16_t port, const duration& interval, const duration& timeout = duration::zero())
-        : TcpCheck(impl::makeTcpAddress(host.c_str(), port), interval, timeout) {}
+        TcpCheck(const std::string& host, uint16_t port, const duration& interval, const duration& timeout = duration::zero(), std::string deregisterCriticalServiceAfter = "")
+        : TcpCheck(impl::makeTcpAddress(host.c_str(), port), interval, timeout, deregisterCriticalServiceAfter) {}
 
         std::string address;
         duration interval;
         duration timeout;
+        std::string deregisterCriticalServiceAfter;
     };
 
     // This check type is deprecated in Consul 1.0 and removed somewhen later.
@@ -114,13 +119,14 @@ namespace ppconsul { namespace agent {
     {
         DockerScriptCheck() = default;
 
-        DockerScriptCheck(std::string containerId, std::string script, const duration& interval, std::string shell = "")
-        : containerId(std::move(containerId)), script(std::move(script)), interval(interval), shell(std::move(shell)) {}
+        DockerScriptCheck(std::string containerId, std::string script, const duration& interval, std::string shell = "", std::string deregisterCriticalServiceAfter = "")
+        : containerId(std::move(containerId)), script(std::move(script)), interval(interval), shell(std::move(shell)), deregisterCriticalServiceAfter(std::move(deregisterCriticalServiceAfter)) {}
 
         std::string containerId;
         std::string script;
         duration interval;
         std::string shell;
+        std::string deregisterCriticalServiceAfter;
     };
 
     // Not supported before Consul 1.0
@@ -128,13 +134,14 @@ namespace ppconsul { namespace agent {
     {
         DockerCommandCheck() = default;
 
-        DockerCommandCheck(std::string containerId, StringList args, const duration& interval, std::string shell = "")
-        : containerId(std::move(containerId)), args(std::move(args)), interval(interval), shell(std::move(shell)) {}
+        DockerCommandCheck(std::string containerId, StringList args, const duration& interval, std::string shell = "", std::string deregisterCriticalServiceAfter = "")
+        : containerId(std::move(containerId)), args(std::move(args)), interval(interval), shell(std::move(shell)), deregisterCriticalServiceAfter(std::move(deregisterCriticalServiceAfter)) {}
 
         std::string containerId;
         StringList args;
         duration interval;
         std::string shell;
+        std::string deregisterCriticalServiceAfter;
     };
 
     using CheckParams = boost::variant<TtlCheck, ScriptCheck, CommandCheck, HttpCheck, TcpCheck, DockerScriptCheck, DockerCommandCheck>;
